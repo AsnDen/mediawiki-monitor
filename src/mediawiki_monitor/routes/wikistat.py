@@ -1,0 +1,79 @@
+from flask import Blueprint, render_template, request
+
+from mediawiki_monitor.config import URLS
+from mediawiki_monitor.service import MediawikiAPIService
+
+
+def create_wikistat_blueprint() -> Blueprint:
+    bp = Blueprint("wikistat", __name__)
+
+    @bp.get("/")
+    def index() -> str:  # pyright: ignore[reportUnusedFunction]
+        return render_template("base.html")
+
+    @bp.get("/wikistat/<string:family>")
+    def wikistat(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
+        url = URLS.get(family)
+
+        # TODO (asnden): return error page
+        if not url:
+            return render_template("base.html")
+
+        with MediawikiAPIService(url) as service:
+            site_info = service.get_site_info()
+            statistics = service.get_statistics()
+            recent_changes = service.get_recent_changes(10)
+
+        # TODO (asnden): replace html generation to templates
+        recent_changes_html = """"""
+        if not recent_changes:
+            raise ValueError
+        for rc in recent_changes:
+            recent_changes_html += f"""
+            <hr>
+            <p>{rc.title}</p>
+            <p>{rc.user}</p>
+            <p>{rc.old_revid}</p>
+            <p>{rc.revid}</p>
+            <p>{rc.timestamp}</p>
+            """
+
+        return render_template(
+            "wikistat/wikifamily.html",
+            base=site_info["base"],
+            sitename=site_info["sitename"],
+            logo=site_info["logo"],
+            generator=site_info["generator"],
+            phpversion=site_info["phpversion"],
+            pages=statistics["pages"],
+            articles=statistics["articles"],
+            edits=statistics["edits"],
+            images=statistics["images"],
+            users=statistics["users"],
+            activeusers=statistics["activeusers"],
+            admins=statistics["admins"],
+            jobs=statistics["jobs"],
+            recent_chagnes=recent_changes_html,
+        )
+
+    @bp.get("/wikistat/<string:family>/diff")
+    def diff_view(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
+        url = URLS[family]
+
+        # TODO (asnden): return error page
+        if not url:
+            return render_template("base.html")
+
+        # TODO (asnden): use title as header or smth
+        title = request.args.get("title")
+        diff = request.args.get("diff", type=int)
+        old_diff = request.args.get("old_diff", type=int)
+
+        # TODO (asnden): return error page
+        if not (diff and old_diff):
+            return render_template("html.base")
+
+        with MediawikiAPIService(url) as service:
+            return service.get_diff(old_diff, diff)
+
+    return bp
