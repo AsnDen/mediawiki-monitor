@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+<h1>{{ sitename | capitalize }}</h1>
+<img src="{{ logo }}">
+<p><a href="{{ base }}">Основная страница</a></p>
+<p>generator = {{ generator }}</p>
+<p>phpversion = {{ phpversion }}</p>
+<p>pages =  {{ pages }}</p>
+<p>articles =  {{ articles }}</p>
+<p>edits =  {{ edits }}</p>
+<p>images =  {{ images }}</p>
+<p>users =  {{ users }}</p>
+<p>activeusers =  {{ activeusers }}</p>
+<p>admins =  {{ admins }}</p>
+<p>jobs =  {{ jobs }}</p>
+{{ recent_chagnes | safe }}
+{% endblock %}
