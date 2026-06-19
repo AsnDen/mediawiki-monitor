@@ -61,7 +61,7 @@ def create_wikistat_blueprint() -> Blueprint:
             activeusers=statistics["activeusers"],
             admins=statistics["admins"],
             jobs=statistics["jobs"],
-            recent_chagnes=recent_changes_html,
+            recent_changes=recent_changes_html,
         )
 
     @bp.get("/wikistat/<string:family>/diff")
