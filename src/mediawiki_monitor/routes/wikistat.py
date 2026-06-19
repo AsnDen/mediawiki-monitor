@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for
 
 from mediawiki_monitor.config import URLS
 from mediawiki_monitor.service import MediawikiAPIService
@@ -29,6 +29,13 @@ def create_wikistat_blueprint() -> Blueprint:
         if not recent_changes:
             raise ValueError
         for rc in recent_changes:
+            diff_url = url_for(
+                "wikistat.diff_view",
+                family=family,
+                diff=rc.revid,
+                old_diff=rc.old_revid,
+                title=rc.title,
+            )
             recent_changes_html += f"""
             <hr>
             <p>{rc.title}</p>
@@ -36,6 +43,7 @@ def create_wikistat_blueprint() -> Blueprint:
             <p>{rc.old_revid}</p>
             <p>{rc.revid}</p>
             <p>{rc.timestamp}</p>
+            <a href="{diff_url}">Diff</a>
             """
 
         return render_template(
@@ -74,6 +82,12 @@ def create_wikistat_blueprint() -> Blueprint:
             return render_template("html.base")
 
         with MediawikiAPIService(url) as service:
-            return service.get_diff(old_diff, diff)
+            diff_view = service.get_diff(old_diff, diff)
+
+        return render_template(
+            "wikistat/diff.html",
+            wiki_page_title=title,
+            diff=diff_view,
+        )
 
     return bp
