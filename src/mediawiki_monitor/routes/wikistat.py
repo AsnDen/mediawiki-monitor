@@ -7,12 +7,23 @@ from mediawiki_monitor.service import MediawikiAPIService
 def create_wikistat_blueprint() -> Blueprint:
     bp = Blueprint("wikistat", __name__)
 
-    @bp.get("/")
-    def index() -> str:  # pyright: ignore[reportUnusedFunction]
-        return render_template("base.html")
+    @bp.get("/wikistat/")
+    def wikistat() -> str:  # pyright: ignore[reportUnusedFunction]
+        links = """<ul>"""
+        for family in URLS:
+            url = url_for(
+                "wikistat.family",
+                family=family,
+            )
+            links += f"<li><a href='{url}'>{family}</a></li>"
+        links += "</ul>"
+        return render_template(
+            "wikistat/wikistat.html",
+            links=links,
+        )
 
     @bp.get("/wikistat/<string:family>")
-    def wikistat(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
+    def family(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
         url = URLS.get(family)
 
         # TODO (asnden): return error page
