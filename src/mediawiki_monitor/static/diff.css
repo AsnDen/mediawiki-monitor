@@ -1,0 +1,58 @@
+.diff {
+  border: 0;
+  border-spacing: 5px;
+  margin: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.diff col.diff-marker {
+  width: 2%;
+}
+
+.diff col.diff-content {
+  width: 48%;
+}
+
+.diff td {
+  padding: 0.33em 0.5em;
+}
+
+.diff-marker {
+  padding: 0.25em;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.25em;
+  line-height: 1.2;
+}
+
+.diff-addedline,
+.diff-deletedline,
+.diff-context {
+  vertical-align: top;
+  border-style: solid;
+  border-width: 2px 2px 2px 5px;
+  border-radius: 0.33em;
+  background: #f0efcb;
+  border-color: #f0efcb;
+}
+
+.diff-addedline .diffchange {
+  background: #c3dfff;
+}
+
+.diff-addedline {
+  border-color: #c3dfff;
+}
+
+.diff-deletedline {
+  border-color: #ffc3c3;
+}
+
+.diff-deletedline .diffchange {
+  background: #ffc3c3;
+}
+
+.diff-marker::before {
+  content: attr(data-marker);
+}

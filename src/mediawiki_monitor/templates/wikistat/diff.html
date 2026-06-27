@@ -1,4 +1,12 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+{% from 'macros.html' import render_styles %}
+
+{% block stylesheets %}
+{{ render_styles(['diff.css']) }}
+{% endblock%}
+
+{% block content %}
 <h1>{{ wiki_page_title | capitalize }}</h1>
 <table class="diff">
   <colgroup>
