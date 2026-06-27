@@ -2,3 +2,18 @@
 .diffchange-inline {
   background-color: cyan;
 }
+
+/* Horizontal lists */
+
+.hlist li {
+  display: inline;
+}
+
+.hlist li::before {
+  content: ' · ';
+  font-weight: bold;
+}
+
+.hlist li:first-child::before {
+  content: none;
+}
