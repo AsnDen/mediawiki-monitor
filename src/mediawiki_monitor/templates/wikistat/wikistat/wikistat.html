@@ -1,6 +1,31 @@
 {% extends "base.html" %}
+{% from 'macros.html' import render_styles %}
+
+{% block stylesheets %}
+{{ render_styles(['wikistat.css']) }}
+{% endblock%}
 
 {% block content %}
-<h1>Navigation</h1>
-{% include "wikistat/wikistat/links.html" %}
+<div class="project-info">
+  <h1>Mediawiki monitor</h1>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.   Phasellus fringilla
+    a ipsum vel auctor. Nulla tincidunt porttitor nisl, a pulvinar nisi. Phasellus
+    interdum iaculis rutrum. Duis venenatis lacus eu justo hendrerit, id pretium dui
+    venenatis. Sed a orci augue. In ipsum turpis, feugiat sit amet mauris at,
+    ultrices lacinia augue.
+  </p>
+</div>
+<div class="available-wikis">
+  <h2>Доступные вики-проекты</h2>
+  {% include "wikistat/wikistat/links.html" %}
+</div>
+<div class="feature-todos">
+  <h2>Планируемые фичи</h2>
+  <ul>
+    <li>Возможность смотреть изменений конкретного пользователя</li>
+    <li>Поиск страницы (текста на странице) по всем доступным вики</li>
+    <li>Добавленные пользователем вики-проекты</li>
+  </ul>
+</div>
 {% endblock %}
