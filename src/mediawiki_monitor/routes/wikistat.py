@@ -54,7 +54,6 @@ def create_wikistat_blueprint() -> Blueprint:
         if not url:
             return render_template("base.html")
 
-        # TODO (asnden): use title as header or smth
         title = request.args.get("title")
         diff = request.args.get("diff", type=int)
         old_diff = request.args.get("old_diff", type=int)
