@@ -1,16 +1,61 @@
-{% extends "base.html" %} {% block content %}
-<h1>{{ sitename | capitalize }}</h1>
-<img src="{{ logo }}">
-<p><a href="{{ base }}" target="_blank">Основная страница</a></p>
-<p>generator = {{ generator }}</p>
-<p>phpversion = {{ phpversion }}</p>
-<p>pages =  {{ pages }}</p>
-<p>articles =  {{ articles }}</p>
-<p>edits =  {{ edits }}</p>
-<p>images =  {{ images }}</p>
-<p>users =  {{ users }}</p>
-<p>activeusers =  {{ activeusers }}</p>
-<p>admins =  {{ admins }}</p>
-<p>jobs =  {{ jobs }}</p>
+{% extends "base.html" %}
+
+{% from 'macros.html' import render_styles %}
+
+{% block stylesheets %}
+{{ render_styles(['wikifamily.css']) }}
+{% endblock%}
+
+{% block content %}
+<div class="wiki-stat">
+  <h1 class="wiki-name">{{ sitename | capitalize }}</h1>
+  <img src="{{ logo }}">
+  <div class="general-wiki-info">
+    <ul class="hlist">
+      <li>
+        <a href="{{ base }}" target="_blank"
+          >Основная страница
+        </a>
+      </li>
+      <li>
+        <a href="{{ site_url ~ "Special:RecentChanges" }}" target="_blank"
+          >Недавние изменения
+        </a>
+      </li>
+      <li>
+        <a href="{{ site_url ~ "Special:FileList" }}" target="_blank"
+          >Загруженные файлы
+        </a>
+      </li>
+      <li>
+        <a href="{{ site_url ~ "Special:Version" }}" target="_blank"
+          >Версия вики
+        </a>
+      </li>
+      <li>
+        <a href="{{ site_url ~ "Mediawiki:Common.css" }}" target="_blank"
+          >Common.css
+        </a>
+      </li>
+      <li>
+        <a href="{{ site_url ~ "Mediawiki:Common.js" }}" target="_blank"
+          >Common.js
+        </a>
+      </li>
+    </ul>
+    <ul class="hlist">
+      <li>генератор вики: {{ generator }}</li>
+      <li>версия php: {{ phpversion }}</li>
+      <li>страниц: {{ pages }}</li>
+      <li>статей: {{ articles }}</li>
+      <li>изменений: {{ edits }}</li>
+      <li>изображений: {{ images }}</li>
+      <li>пользователей: {{ users }}</li>
+      <li>активных пользователей: {{ activeusers }}</li>
+      <li>администраторов: {{ admins }}</li>
+      <li>слежубных работ (jobs): {{ jobs }}</li>
+    </ul>
+  </div>
+</div>
 {% include "wikistat/wikifamily/recent_changes.html" %}
 {% endblock %}
