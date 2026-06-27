@@ -8,6 +8,7 @@
 
 {% block content %}
 <h1>{{ wiki_page_title | capitalize }}</h1>
+<p><a href="{{ url_for("wikistat.family", family=family) }}">Вернуться</a></p>
 <table class="diff">
   <colgroup>
     <col class="diff-marker">

@@ -72,6 +72,7 @@ def create_wikistat_blueprint() -> Blueprint:
             "wikistat/diff.html",
             wiki_page_title=title,
             diff=diff_view,
+            family=family,
         )
 
     return bp
