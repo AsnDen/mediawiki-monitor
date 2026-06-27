@@ -1,0 +1,8 @@
+{% macro render_styles(styles_list) %}
+{% for style in styles_list %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename=style) }}"
+/>
+{% endfor %}
+{% endmacro %}
