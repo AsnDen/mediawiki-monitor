@@ -202,6 +202,7 @@ class MediawikiAPIService:
                 "rcprop": ("ids|title|timestamp|user|comment"),
                 "rcnamespace": "*",
                 "rcshow": f"{'!' if no_bots else ''}bot",
+                "rctype": "new|edit",
             },
         )
 
