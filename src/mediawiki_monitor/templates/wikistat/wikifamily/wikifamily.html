@@ -12,5 +12,5 @@
 <p>activeusers =  {{ activeusers }}</p>
 <p>admins =  {{ admins }}</p>
 <p>jobs =  {{ jobs }}</p>
-{{ recent_changes | safe }}
+{% include "wikistat/wikifamily/recent_changes.html" %}
 {% endblock %}

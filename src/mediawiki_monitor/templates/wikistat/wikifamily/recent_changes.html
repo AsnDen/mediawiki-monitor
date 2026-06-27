@@ -1,0 +1,19 @@
+{% for rc in recent_changes %}
+<hr>
+<p>{{ rc.title }}</p>
+<p>{{ rc.user }}</p>
+<p>{{ rc.old_revid }}</p>
+<p>{{ rc.revid }}</p>
+<p>{{ rc.timestamp }}</p>
+<a href="{{ url_for(
+  "wikistat.diff_view",
+  family=family,
+  diff=rc.revid,
+  old_diff=rc.old_revid,
+  title=rc.title,
+  ) }}"
+>
+  Diff
+</a>
+
+{% endfor %}
