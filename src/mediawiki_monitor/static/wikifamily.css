@@ -1,0 +1,14 @@
+.wiki-stat {
+  width: 80%;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.wiki-stat .hlist {
+  width: 80%;
+  margin: 10px auto;
+}
+
+.wiki-stat .hlist li {
+  text-align: left;
+}
