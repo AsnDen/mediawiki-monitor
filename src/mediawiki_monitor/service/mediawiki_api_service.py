@@ -14,6 +14,7 @@ class RecentChangePayload(TypedDict):
     timestamp: str
     user: str
     comment: str
+    type: str
 
 
 class RecentChangeQueryPayload(TypedDict):
@@ -31,6 +32,7 @@ class RecentChange:
     title: str
     timestamp: str
     user: str
+    type: str
 
 
 # Diff compare
@@ -217,6 +219,7 @@ class MediawikiAPIService:
                 title=rc["title"],
                 timestamp=rc["timestamp"],
                 user=rc["user"],
+                type=rc["type"],
             )
             for rc in data["query"]["recentchanges"]
         ]
