@@ -11,21 +11,10 @@
     {% endfor %}
   </head>
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for("wikistat.wikistat") }}">Hub</a></li>
-        </ul>
-      </nav>
-    </header>
-
+    {% include "base_header.html" %}
     <main>
       {% block content %}{% endblock %}
     </main>
-
-    <footer>
-      <hr>
-      {% block footer %}by AsnDen{% endblock %}
-    </footer>
+    {% include "base_footer.html" %}
   </body>
 </html>
