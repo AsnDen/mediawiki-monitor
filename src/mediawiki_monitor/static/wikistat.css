@@ -1,0 +1,15 @@
+main {
+  width: 70%;
+  margin: 10px auto 20px;
+}
+
+main h2,
+.project-info {
+  text-align: center;
+}
+
+.available-wikis ul,
+.feature-todos ul {
+  margin: 0 auto;
+  max-width: max-content;
+}
