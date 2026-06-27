@@ -54,6 +54,8 @@ class SiteinfoPayload(TypedDict):
     logo: str
     generator: str
     phpversion: str
+    server: str
+    articlepath: str
 
 
 class SiteinfoGeneralPayload(TypedDict):

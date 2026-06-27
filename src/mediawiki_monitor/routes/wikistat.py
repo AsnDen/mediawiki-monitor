@@ -27,6 +27,8 @@ def create_wikistat_blueprint() -> Blueprint:
             statistics = service.get_statistics()
             recent_changes = service.get_recent_changes(10)
 
+        arcitcle_path = site_info["server"] + site_info["articlepath"].replace("$1", "")
+
         return render_template(
             "wikistat/wikifamily/wikifamily.html",
             base=site_info["base"],
@@ -43,6 +45,7 @@ def create_wikistat_blueprint() -> Blueprint:
             admins=statistics["admins"],
             jobs=statistics["jobs"],
             family=family,
+            site_url=arcitcle_path,
             recent_changes=recent_changes,
         )
 
