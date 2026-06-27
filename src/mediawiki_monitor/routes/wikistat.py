@@ -60,7 +60,7 @@ def create_wikistat_blueprint() -> Blueprint:
 
         # TODO (asnden): return error page
         if not (diff and old_diff):
-            return render_template("html.base")
+            return render_template("base.html")
 
         with MediawikiAPIService(url) as service:
             diff_view = service.get_diff(old_diff, diff)
