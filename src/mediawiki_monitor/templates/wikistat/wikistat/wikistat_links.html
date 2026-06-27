@@ -1,0 +1,9 @@
+<ul>
+{% for family in families %}
+<li>
+  <a href="{{ url_for("wikistat.family", family=family) }}">
+    {{ family }}
+  </a>
+</li>
+{% endfor %}
+</ul>

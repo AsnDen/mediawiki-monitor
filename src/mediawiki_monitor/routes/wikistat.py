@@ -9,17 +9,9 @@ def create_wikistat_blueprint() -> Blueprint:
 
     @bp.get("/wikistat/")
     def wikistat() -> str:  # pyright: ignore[reportUnusedFunction]
-        links = """<ul>"""
-        for family in URLS:
-            url = url_for(
-                "wikistat.family",
-                family=family,
-            )
-            links += f"<li><a href='{url}'>{family}</a></li>"
-        links += "</ul>"
         return render_template(
-            "wikistat/wikistat.html",
-            links=links,
+            "wikistat/wikistat/wikistat.html",
+            families=URLS.keys(),
         )
 
     @bp.get("/wikistat/<string:family>")
