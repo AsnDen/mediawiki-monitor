@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from httpx import ConnectTimeout
+from httpx import TimeoutException
 
 from mediawiki_monitor.config import URLS
 from mediawiki_monitor.service import MediawikiAPIService
@@ -30,7 +30,7 @@ def create_wikistat_blueprint() -> Blueprint:
                 site_info = service.get_site_info()
                 statistics = service.get_statistics()
                 recent_changes = service.get_recent_changes(10)
-        except ConnectTimeout:
+        except TimeoutException:
             return render_template(
                 "wikistat/error.html",
                 message="Вики-проект на данный момент недоступен. Попробуйте позже.",
@@ -81,7 +81,7 @@ def create_wikistat_blueprint() -> Blueprint:
         try:
             with MediawikiAPIService(url) as service:
                 diff_view = service.get_diff(old_diff, diff)
-        except ConnectTimeout:
+        except TimeoutException:
             return render_template(
                 "wikistat/error.html",
                 message="Вики-проект на данный момент недоступен. Попробуйте позже.",
