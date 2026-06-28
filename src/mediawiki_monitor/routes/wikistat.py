@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from httpx import ConnectTimeout
 
 from mediawiki_monitor.config import URLS
 from mediawiki_monitor.service import MediawikiAPIService
@@ -18,14 +19,22 @@ def create_wikistat_blueprint() -> Blueprint:
     def family(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
         url = URLS.get(family)
 
-        # TODO (asnden): return error page
         if not url:
-            return render_template("base.html")
+            return render_template(
+                "wikistat/error.html",
+                message="Некорректная ссылка на вики-проект.",
+            )
 
-        with MediawikiAPIService(url) as service:
-            site_info = service.get_site_info()
-            statistics = service.get_statistics()
-            recent_changes = service.get_recent_changes(10)
+        try:
+            with MediawikiAPIService(url) as service:
+                site_info = service.get_site_info()
+                statistics = service.get_statistics()
+                recent_changes = service.get_recent_changes(10)
+        except ConnectTimeout:
+            return render_template(
+                "wikistat/error.html",
+                message="Вики-проект на данный момент недоступен. Попробуйте позже.",
+            )
 
         arcitcle_path = site_info["server"] + site_info["articlepath"].replace("$1", "")
 
@@ -53,20 +62,30 @@ def create_wikistat_blueprint() -> Blueprint:
     def diff_view(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
         url = URLS[family]
 
-        # TODO (asnden): return error page
         if not url:
-            return render_template("base.html")
+            return render_template(
+                "wikistat/error.html",
+                message="Некорректная ссылка на вики-проект.",
+            )
 
         title = request.args.get("title")
         diff = request.args.get("diff", type=int)
         old_diff = request.args.get("old_diff", type=int)
 
-        # TODO (asnden): return error page
         if not (diff and old_diff):
-            return render_template("base.html")
+            return render_template(
+                "wikistat/error.html",
+                message="Невозможно создать diff для страницы.",
+            )
 
-        with MediawikiAPIService(url) as service:
-            diff_view = service.get_diff(old_diff, diff)
+        try:
+            with MediawikiAPIService(url) as service:
+                diff_view = service.get_diff(old_diff, diff)
+        except ConnectTimeout:
+            return render_template(
+                "wikistat/error.html",
+                message="Вики-проект на данный момент недоступен. Попробуйте позже.",
+            )
 
         return render_template(
             "wikistat/diff.html",
