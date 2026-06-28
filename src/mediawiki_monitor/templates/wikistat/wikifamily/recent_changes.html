@@ -3,7 +3,7 @@
   <hr>
   <p>
     {{ "Добавление" if rc.type == "new" else "Изменение" }} страницы <a
-      href="{{ site_url ~ rc.title }}"
+      href="{{ base ~ "/index.php?" ~ "title=" ~ rc.title ~ "&oldid=" ~ rc.old_revid}}"
       >{{ rc.title }}</a>.
     {% if rc.type == "edit" %}
     <a
