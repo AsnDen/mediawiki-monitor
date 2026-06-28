@@ -60,7 +60,7 @@ def create_wikistat_blueprint() -> Blueprint:
 
     @bp.get("/wikistat/<string:family>/diff")
     def diff_view(family: str) -> str:  # pyright: ignore[reportUnusedFunction]
-        url = URLS[family]
+        url = URLS.get(family)
 
         if not url:
             return render_template(
