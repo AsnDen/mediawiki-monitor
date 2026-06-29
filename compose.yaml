@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    container_name: mediawiki-monitor
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
