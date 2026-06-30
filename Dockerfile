@@ -10,4 +10,4 @@ RUN uv sync --no-install-project --no-dev
 
 COPY . .
 
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:8000", "mediawiki_monitor.__main__:create_app()"]
+CMD ["uv", "run", "gunicorn", "mediawiki_monitor.__main__:create_app()"]
