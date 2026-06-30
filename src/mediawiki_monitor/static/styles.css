@@ -12,3 +12,14 @@
 .hlist li:first-child::before {
   content: none;
 }
+
+/* Nav box */
+nav {
+  display: flex;
+  gap: 20px;
+  padding: 12px;
+}
+
+nav a {
+  text-decoration: none;
+}
