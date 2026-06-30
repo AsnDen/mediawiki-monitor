@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mediamonitor = "mediawiki_monitor.__main__:main"
+mediamonitor = "mediawiki_monitor.__main__:run_app"
 
 [tool.ruff]
 line-length = 88
