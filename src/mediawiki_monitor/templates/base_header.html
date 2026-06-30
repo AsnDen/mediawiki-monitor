@@ -1,9 +1,11 @@
 <header>
   {% block header %}
   <nav>
-    <ul>
-      <li><a href="{{ url_for("wikistat.wikistat") }}">Основная страница</a></li>
-    </ul>
+    <a href="{{ url_for("wikistat.wikistat") }}">Основная страница</a>
+    <a href="{{ url_for("wikistat.family", family="corvax") }}">Corvax</a>
+    <a href="{{ url_for("wikistat.family", family="dead_space") }}">Мёртвый космос</a>
+    <a href="{{ url_for("wikistat.family", family="ss220") }}">ss220</a>
+    <a href="{{ url_for("wikistat.family", family="wizards") }}">Space Wizards</a>
   </nav>
   {% endblock %}
 </header>
