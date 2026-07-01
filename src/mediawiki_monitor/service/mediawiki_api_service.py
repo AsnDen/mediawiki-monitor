@@ -121,17 +121,16 @@ class AllusersResponse(TypedDict):
 
 
 class MediawikiAPIService:
-    def __init__(self, api_base_url: str, api_relative_url: str = "api.php") -> None:
+    def __init__(self, api_url: str) -> None:
         self.client: Client = Client(
-            base_url=api_base_url,
             timeout=10.0,
             follow_redirects=True,
         )
-        self.api_relative_url: str = api_relative_url
+        self.api_url: str = api_url
 
     def get_site_info(self) -> SiteinfoPayload:
         response = self.client.get(
-            self.api_relative_url,
+            self.api_url,
             params={
                 "action": "query",
                 "meta": "siteinfo",
@@ -147,7 +146,7 @@ class MediawikiAPIService:
 
     def get_statistics(self) -> StatisticsPayload:
         response = self.client.get(
-            self.api_relative_url,
+            self.api_url,
             params={
                 "action": "query",
                 "meta": "siteinfo",
@@ -164,7 +163,7 @@ class MediawikiAPIService:
 
     def get_users_by_group(self, groups: tuple[str, ...]) -> list[User]:
         response = self.client.get(
-            self.api_relative_url,
+            self.api_url,
             params={
                 "action": "query",
                 "list": "allusers",
@@ -195,7 +194,7 @@ class MediawikiAPIService:
     ) -> list[RecentChange]:
         # TODO (asnden): rerequest in case total > limit (see mediawiki api doc)
         response = self.client.get(
-            self.api_relative_url,
+            self.api_url,
             params={
                 "action": "query",
                 "list": "recentchanges",
@@ -226,7 +225,7 @@ class MediawikiAPIService:
 
     def get_diff(self, from_rev: int, to_rev: int) -> str:
         response = self.client.get(
-            self.api_relative_url,
+            self.api_url,
             params={
                 "action": "compare",
                 "fromrev": from_rev,
