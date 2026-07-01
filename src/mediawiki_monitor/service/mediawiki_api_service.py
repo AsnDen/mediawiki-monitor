@@ -58,6 +58,7 @@ class SiteinfoPayload(TypedDict):
     phpversion: str
     server: str
     articlepath: str
+    script: str
 
 
 class SiteinfoGeneralPayload(TypedDict):
