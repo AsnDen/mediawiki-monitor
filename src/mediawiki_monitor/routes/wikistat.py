@@ -1,3 +1,5 @@
+from collections.abc import KeysView
+
 from flask import Blueprint, render_template, request
 from httpx import TimeoutException
 
@@ -5,14 +7,21 @@ from mediawiki_monitor.config import URLS
 from mediawiki_monitor.service import MediawikiAPIService
 
 
+def _get_wikifamily_links() -> KeysView[str]:
+    return URLS.keys()
+
+
 def create_wikistat_blueprint() -> Blueprint:
     bp = Blueprint("wikistat", __name__)
+
+    @bp.context_processor
+    def inject_links() -> dict[str, KeysView[str]]:  # pyright: ignore[reportUnusedFunction]
+        return {"families": _get_wikifamily_links()}
 
     @bp.get("/wikistat/")
     def wikistat() -> str:  # pyright: ignore[reportUnusedFunction]
         return render_template(
             "wikistat/wikistat/wikistat.html",
-            families=URLS.keys(),
         )
 
     @bp.get("/wikistat/<string:family>")
