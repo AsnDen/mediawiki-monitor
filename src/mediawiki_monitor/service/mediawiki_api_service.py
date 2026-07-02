@@ -32,6 +32,7 @@ class RecentChange:
     title: str
     timestamp: str
     user: str
+    comment: str
     type: str
 
 
@@ -219,6 +220,7 @@ class MediawikiAPIService:
                 title=rc["title"],
                 timestamp=rc["timestamp"],
                 user=rc["user"],
+                comment=rc["comment"],
                 type=rc["type"],
             )
             for rc in data["query"]["recentchanges"]
