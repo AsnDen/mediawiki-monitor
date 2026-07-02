@@ -2,11 +2,12 @@
 <div class="rc-change">
   <hr>
   <p>
-    {{ "Добавление" if rc.type == "new" else "Изменение" }} страницы <a
+    {{ rc.timestamp }} ..
+    {{ "добавление" if rc.type == "new" else "изменение" }} <a
       href="{{ script ~ "?title=" ~ rc.title ~ "&oldid=" ~ rc.old_revid}}"
-      >{{ rc.title }}</a>.
+      >{{ rc.title }}</a>
     {% if rc.type == "edit" %}
-    <a
+    (<a
     href="{{ url_for(
       "wikistat.diff_view",
       family=family,
@@ -14,13 +15,12 @@
       old_diff=rc.old_revid,
       title=rc.title,
       ) }}"
-    >Diff</a>
+    >разн.</a>) ..
+    {% endif %}
+    {{ rc.user }}
+    {% if rc.comment %}
+    ({{ rc.comment }})
     {% endif %}
   </p>
-  <p>Автор изменения: {{ rc.user }}</p>
-  <p>Время изменения: {{ rc.timestamp }}</p>
-  {% if rc.comment %}
-  <p>Комментарий: {{ rc.comment }}</p>
-  {% endif %}
 </div>
 {% endfor %}
