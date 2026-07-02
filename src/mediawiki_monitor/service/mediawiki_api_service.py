@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from importlib.metadata import PackageNotFoundError, version
 from typing import NotRequired, Self, TypedDict, cast
 
 from httpx import Client
@@ -165,9 +166,21 @@ class UserContribsResponse(TypedDict):
 
 class MediawikiAPIService:
     def __init__(self, api_url: str) -> None:
+
+        try:
+            project_version = version("mediawiki-monitor")
+        except PackageNotFoundError:
+            project_version = "0.1.0-dev"
+
+        user_agent = (
+            f"MediawikiMonitor/{project_version} "
+            "(https://github.com/AsnDen/mediawiki-monitor); "
+            "asnden@gmail.com)"
+        )
         self.client: Client = Client(
             timeout=10.0,
             follow_redirects=True,
+            headers={"User-Agent": user_agent},
         )
         self.api_url: str = api_url
 
