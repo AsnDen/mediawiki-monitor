@@ -302,6 +302,7 @@ class MediawikiAPIService:
             for rc in data["query"]["recentchanges"]
         ]
 
+    # TODO (asnden): rename to specify that it's from revision
     def get_diff(self, from_rev: int, to_rev: int) -> str:
         response = self.client.get(
             self.api_url,
@@ -309,6 +310,24 @@ class MediawikiAPIService:
                 "action": "compare",
                 "fromrev": from_rev,
                 "torev": to_rev,
+                "prop": "diff",
+                "format": "json",
+            },
+        )
+
+        _ = response.raise_for_status()
+
+        data = cast("CompareResponse", response.json())
+
+        return data["compare"]["*"]
+
+    def get_diff_by_page_ids(self, from_id: int, to_id: int) -> str:
+        response = self.client.get(
+            self.api_url,
+            params={
+                "action": "compare",
+                "fromid": from_id,
+                "toid": to_id,
                 "prop": "diff",
                 "format": "json",
             },
