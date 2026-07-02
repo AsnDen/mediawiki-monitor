@@ -1,0 +1,25 @@
+{% for uc in user_contribs %}
+<div class="uc-change">
+  <hr>
+  <p>
+    {{ uc.timestamp }} ..
+    {{ "добавление" if uc.new else "изменение" }} <a
+      href="{{ script ~ "?title=" ~ uc.title ~ "&oldid=" ~ uc.revid}}"
+      >{{ uc.title }}</a>
+    {% if not uc.new %}
+    (<a
+    href="{{ url_for(
+      "wikistat.diff_view",
+      family=family,
+      from_rev=uc.parentid,
+      to_rev=uc.revid,
+      title=uc.title,
+      ) }}"
+    >разн.</a>) ..
+    {% endif %}
+    {% if uc.comment %}
+    ({{ uc.comment }})
+    {% endif %}
+  </p>
+</div>
+{% endfor %}

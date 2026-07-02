@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% from 'macros.html' import render_styles %}
+
+{% block stylesheets %}
+{{ render_styles(['user.css']) }}
+{% endblock%}
+
+{% block content %}
+<div class="uc">
+  <h1>{{ user }}</h1>
+  {% include "wikistat/user/contribs.html" %}
+</div>
+{% endblock %}
