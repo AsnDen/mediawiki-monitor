@@ -116,6 +116,47 @@ class AllusersResponse(TypedDict):
     query: AllusersPayload
 
 
+class UserContribPayload(TypedDict):
+    userid: int
+    user: str
+    pageid: int
+    revid: int
+    parentid: int
+    ns: int
+    title: str
+    timestamp: str
+    new: NotRequired[str]
+    minor: NotRequired[str]
+    top: NotRequired[str]
+    comment: str
+    size: int
+
+
+@dataclass(slots=True, frozen=True)
+class UserContrib:
+    userid: int
+    user: str
+    pageid: int
+    revid: int
+    parentid: int
+    ns: int
+    title: str
+    timestamp: str
+    new: bool
+    minor: bool
+    top: bool
+    comment: str
+    size: int
+
+
+class UserContribsPayload(TypedDict):
+    usercontribs: list[UserContribPayload]
+
+
+class UserContribsResponse(TypedDict):
+    query: UserContribsPayload
+
+
 # Libraries and extensions
 # TODO (anden): stuff for libraries and extensions
 
@@ -189,6 +230,41 @@ class MediawikiAPIService:
                 groups=user["groups"],
             )
             for user in data["query"]["allusers"]
+        ]
+
+    def get_user_contributions(self, user: str, total: int = 10) -> list[UserContrib]:
+        response = self.client.get(
+            self.api_url,
+            params={
+                "action": "query",
+                "list": "usercontribs",
+                "format": "json",
+                "ucuser": user,
+                "uclimit": total,
+            },
+        )
+
+        _ = response.raise_for_status()
+
+        data = cast("UserContribsResponse", response.json())
+
+        return [
+            UserContrib(
+                userid=uc["userid"],
+                user=uc["user"],
+                pageid=uc["pageid"],
+                revid=uc["revid"],
+                parentid=uc["parentid"],
+                ns=uc["ns"],
+                title=uc["title"],
+                timestamp=uc["timestamp"],
+                minor=uc.get("minor") is not None,
+                new=uc.get("new") is not None,
+                top=uc.get("top") is not None,
+                comment=uc["comment"],
+                size=uc["size"],
+            )
+            for uc in data["query"]["usercontribs"]
         ]
 
     def get_recent_changes(
