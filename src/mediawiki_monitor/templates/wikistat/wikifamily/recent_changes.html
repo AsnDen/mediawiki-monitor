@@ -17,7 +17,9 @@
       ) }}"
     >разн.</a>) ..
     {% endif %}
-    {{ rc.user }}
+    <a
+      href="{{ url_for("wikistat.user", family=family, user=rc.user) }}"
+    >{{ rc.user }}</a>
     {% if rc.comment %}
     ({{ rc.comment }})
     {% endif %}

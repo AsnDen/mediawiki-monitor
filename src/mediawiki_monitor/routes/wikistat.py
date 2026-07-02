@@ -111,4 +111,36 @@ def create_wikistat_blueprint() -> Blueprint:
             family=family,
         )
 
+    @bp.get("/wikistat/<string:family>/<string:user>")
+    def user(family: str, user: str) -> str:  # pyright: ignore[reportUnusedFunction]
+        url = URLS.get(family)
+
+        if not url:
+            return render_template(
+                "wikistat/error.html",
+                message="Некорректная ссылка на вики-проект.",
+            )
+
+        try:
+            with MediawikiAPIService(url) as service:
+                user_contribs = service.get_user_contributions(user, 100)
+                # TODO (asnden): remove side_info
+                # and think about better way to get `script`
+                site_info = service.get_site_info()
+        except TimeoutException:
+            return render_template(
+                "wikistat/error.html",
+                message="Вики-проект на данный момент недоступен. Попробуйте позже.",
+            )
+
+        script = site_info["server"] + site_info["script"]
+
+        return render_template(
+            "wikistat/user/user.html",
+            user_contribs=user_contribs,
+            script=script,
+            family=family,
+            user=user,
+        )
+
     return bp
