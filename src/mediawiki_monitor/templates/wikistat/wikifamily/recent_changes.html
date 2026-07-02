@@ -11,8 +11,8 @@
     href="{{ url_for(
       "wikistat.diff_view",
       family=family,
-      diff=rc.revid,
-      old_diff=rc.old_revid,
+      from_rev=rc.revid,
+      to_rev=rc.old_revid,
       title=rc.title,
       ) }}"
     >разн.</a>) ..

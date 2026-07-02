@@ -80,18 +80,24 @@ def create_wikistat_blueprint() -> Blueprint:
             )
 
         title = request.args.get("title")
-        diff = request.args.get("diff", type=int)
-        old_diff = request.args.get("old_diff", type=int)
 
-        if not (diff and old_diff):
-            return render_template(
-                "wikistat/error.html",
-                message="Невозможно создать diff для страницы.",
-            )
+        to_rev = request.args.get("to_rev", type=int)
+        from_rev = request.args.get("from_rev", type=int)
+
+        to_id = request.args.get("to_id", type=int)
+        from_id = request.args.get("from_id", type=int)
 
         try:
             with MediawikiAPIService(url) as service:
-                diff_view = service.get_diff(old_diff, diff)
+                if to_id and from_id:
+                    diff_view = service.get_diff_by_page_ids(from_id, to_id)
+                elif to_rev and from_rev:
+                    diff_view = service.get_diff(from_rev, to_rev)
+                else:
+                    return render_template(
+                        "wikistat/error.html",
+                        message="Невозможно создать diff. Недостаточно параметров.",
+                    )
         except TimeoutException:
             return render_template(
                 "wikistat/error.html",
