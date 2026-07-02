@@ -38,7 +38,7 @@ def create_wikistat_blueprint() -> Blueprint:
             with MediawikiAPIService(url) as service:
                 site_info = service.get_site_info()
                 statistics = service.get_statistics()
-                recent_changes = service.get_recent_changes(10)
+                recent_changes = service.get_recent_changes(100)
         except TimeoutException:
             return render_template(
                 "wikistat/error.html",

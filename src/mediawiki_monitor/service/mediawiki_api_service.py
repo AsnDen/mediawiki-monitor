@@ -191,7 +191,7 @@ class MediawikiAPIService:
         ]
 
     def get_recent_changes(
-        self, total: int, *, no_bots: bool = True
+        self, total: int = 10, *, no_bots: bool = True
     ) -> list[RecentChange]:
         # TODO (asnden): rerequest in case total > limit (see mediawiki api doc)
         response = self.client.get(
