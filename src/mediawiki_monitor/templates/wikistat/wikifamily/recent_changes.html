@@ -3,7 +3,9 @@
   <hr>
   <p>
     {{ rc.timestamp }} ..
-    {{ "добавление" if rc.type == "new" else "изменение" }} <a
+    {{ "добавление"
+     if rc.type == "new" or rc.logaction == "overwrite"
+     else "изменение" }} <a
       href="{{ script ~ "?title=" ~ rc.title ~ "&oldid=" ~ rc.old_revid}}"
       >{{ rc.title }}</a>
     {% if rc.type == "edit" %}
