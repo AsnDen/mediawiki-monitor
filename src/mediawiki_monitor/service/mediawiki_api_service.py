@@ -177,16 +177,16 @@ class MediawikiAPIService:
             "(https://github.com/AsnDen/mediawiki-monitor); "
             "asnden@gmail.com)"
         )
-        self.client: Client = Client(
+        self._client: Client = Client(
             timeout=10.0,
             follow_redirects=True,
             headers={"User-Agent": user_agent},
         )
-        self.api_url: str = api_url
+        self._api_url: str = api_url
 
     def get_site_info(self) -> SiteinfoPayload:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "query",
                 "meta": "siteinfo",
@@ -201,8 +201,8 @@ class MediawikiAPIService:
         return data["query"]["general"]
 
     def get_statistics(self) -> StatisticsPayload:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "query",
                 "meta": "siteinfo",
@@ -218,8 +218,8 @@ class MediawikiAPIService:
         return data["query"]["statistics"]
 
     def get_users_by_group(self, groups: tuple[str, ...]) -> list[User]:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "query",
                 "list": "allusers",
@@ -246,8 +246,8 @@ class MediawikiAPIService:
         ]
 
     def get_user_contributions(self, user: str, total: int = 10) -> list[UserContrib]:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "query",
                 "list": "usercontribs",
@@ -284,8 +284,8 @@ class MediawikiAPIService:
         self, total: int = 10, *, no_bots: bool = True
     ) -> list[RecentChange]:
         # TODO (asnden): rerequest in case total > limit (see mediawiki api doc)
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "query",
                 "list": "recentchanges",
@@ -317,8 +317,8 @@ class MediawikiAPIService:
 
     # TODO (asnden): rename to specify that it's from revision
     def get_diff(self, from_rev: int, to_rev: int) -> str:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "compare",
                 "fromrev": from_rev,
@@ -335,8 +335,8 @@ class MediawikiAPIService:
         return data["compare"]["*"]
 
     def get_diff_by_page_ids(self, from_id: int, to_id: int) -> str:
-        response = self.client.get(
-            self.api_url,
+        response = self._client.get(
+            self._api_url,
             params={
                 "action": "compare",
                 "fromid": from_id,
@@ -353,7 +353,7 @@ class MediawikiAPIService:
         return data["compare"]["*"]
 
     def close(self) -> None:
-        self.client.close()
+        self._client.close()
 
     def __enter__(self) -> Self:
         return self
