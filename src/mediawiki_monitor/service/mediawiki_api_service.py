@@ -16,6 +16,8 @@ class RecentChangePayload(TypedDict):
     user: str
     comment: str
     type: str
+    logtype: NotRequired[str]
+    logaction: NotRequired[str]
 
 
 class RecentChangeQueryPayload(TypedDict):
@@ -35,6 +37,8 @@ class RecentChange:
     user: str
     comment: str
     type: str
+    logtype: str | None
+    logaction: str | None
 
 
 # Diff compare
@@ -284,6 +288,7 @@ class MediawikiAPIService:
         self, total: int = 10, *, no_bots: bool = True
     ) -> list[RecentChange]:
         # TODO (asnden): rerequest in case total > limit (see mediawiki api doc)
+        # also should rerequest in case len(return list) < total
         response = self._client.get(
             self._api_url,
             params={
@@ -291,10 +296,10 @@ class MediawikiAPIService:
                 "list": "recentchanges",
                 "rclimit": total,
                 "format": "json",
-                "rcprop": ("ids|title|timestamp|user|comment"),
+                "rcprop": "ids|title|timestamp|user|comment|loginfo",
                 "rcnamespace": "*",
                 "rcshow": f"{'!' if no_bots else ''}bot",
-                "rctype": "new|edit",
+                "rctype": "new|edit|log",
             },
         )
 
@@ -311,8 +316,11 @@ class MediawikiAPIService:
                 user=rc["user"],
                 comment=rc["comment"],
                 type=rc["type"],
+                logtype=rc.get("logtype"),
+                logaction=rc.get("logaction"),
             )
             for rc in data["query"]["recentchanges"]
+            if not rc.get("logtype") or rc.get("logtype") == "upload"
         ]
 
     # TODO (asnden): rename to specify that it's from revision
