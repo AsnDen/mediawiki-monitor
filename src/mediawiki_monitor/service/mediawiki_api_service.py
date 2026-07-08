@@ -121,6 +121,27 @@ class AllusersResponse(TypedDict):
     query: AllusersPayload
 
 
+class ActiveUserPayload(TypedDict):
+    userid: int
+    name: str
+    recentactions: int
+
+
+@dataclass(slots=True, frozen=True)
+class ActiveUser:
+    userid: int
+    name: str
+    recentactions: int
+
+
+class ActiveusersPayload(TypedDict):
+    allusers: list[ActiveUserPayload]
+
+
+class ActiveusersResponse(TypedDict):
+    query: ActiveusersPayload
+
+
 class UserContribPayload(TypedDict):
     userid: int
     user: str
@@ -245,6 +266,31 @@ class MediawikiAPIService:
                 editcount=user["editcount"],
                 registration=user["registration"],
                 groups=user["groups"],
+            )
+            for user in data["query"]["allusers"]
+        ]
+
+    def get_active_users(self) -> list[ActiveUser]:
+        response = self._client.get(
+            self._api_url,
+            params={
+                "action": "query",
+                "list": "allusers",
+                "format": "json",
+                "aulimit": 500,
+                "auactiveusers": True,
+            },
+        )
+
+        _ = response.raise_for_status()
+
+        data = cast("ActiveusersResponse", response.json())
+
+        return [
+            ActiveUser(
+                userid=user["userid"],
+                name=user["name"],
+                recentactions=user["recentactions"],
             )
             for user in data["query"]["allusers"]
         ]
