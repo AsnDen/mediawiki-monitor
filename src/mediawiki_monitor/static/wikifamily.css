@@ -12,3 +12,8 @@
 .wiki-stat .hlist li {
   text-align: left;
 }
+
+.wiki-stat .wiki-admins h2,
+.wiki-stat .active-users h2 {
+  font-size: 1em;
+}

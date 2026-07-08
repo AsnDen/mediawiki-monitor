@@ -39,6 +39,8 @@ def create_wikistat_blueprint() -> Blueprint:
                 site_info = service.get_site_info()
                 statistics = service.get_statistics()
                 recent_changes = service.get_recent_changes(100)
+                active_users = service.get_active_users()
+                administators = service.get_users_by_group(("sysop", "bureaucrat"))
         except TimeoutException:
             return render_template(
                 "wikistat/error.html",
@@ -67,6 +69,8 @@ def create_wikistat_blueprint() -> Blueprint:
             article_path=arcitcle_path,
             script=script,
             recent_changes=recent_changes,
+            active_users=active_users,
+            administators=administators,
         )
 
     @bp.get("/wikistat/<string:family>/diff")

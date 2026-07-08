@@ -1,0 +1,13 @@
+<div class="wiki-admins">
+  <h2>Администрация (sysop и bureaucrat)</h2>
+  <ul class="hlist">
+    {% for admin in administators %}
+    <li>
+      <a
+        href="{{ url_for("wikistat.user", family=family, user=admin.name) }}"
+      >{{ admin.name }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

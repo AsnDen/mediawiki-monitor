@@ -1,0 +1,12 @@
+<div class="active-users">
+  <h2>Активные пользователи и количество их правок</h2>
+  <ul class="hlist">
+    {% for au in active_users %}
+    <li>
+      <a
+        href="{{ url_for("wikistat.user", family=family, user=au.name) }}"
+      >{{ au.name }}</a>: {{ au.recentactions }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>

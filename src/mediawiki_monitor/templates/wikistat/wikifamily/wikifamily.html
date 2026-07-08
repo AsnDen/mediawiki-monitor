@@ -55,6 +55,8 @@
       <li>администраторов: {{ admins }}</li>
       <li>служебных работ (jobs): {{ jobs }}</li>
     </ul>
+    {% include "wikistat/wikifamily/active_users.html" %}
+    {% include "wikistat/wikifamily/administators.html" %}
   </div>
 </div>
 {% include "wikistat/wikifamily/recent_changes.html" %}
