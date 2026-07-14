@@ -18,7 +18,6 @@ line-length = 88
 target-version = "py314"
 
 [tool.ruff.lint]
-dummy-variable-rgx = "^_+$"
 select = ["ALL"]
 
 ignore = [
