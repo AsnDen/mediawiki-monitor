@@ -183,6 +183,60 @@ class UserContribsResponse(TypedDict):
     query: UserContribsPayload
 
 
+# See https://www.mediawiki.org/wiki/API:Siteinfo
+# for full fields list.
+# Only descriptionmsgparams is emitted
+# as I've not seen it in responses (idk return type)
+# Seems like most fields are not requred
+ExtensionPayload = TypedDict(
+    "ExtensionPayload",
+    {
+        "type": str,
+        "name": NotRequired[str],
+        "namemsg": NotRequired[str],
+        "description": NotRequired[str],
+        "descriptionmsg": NotRequired[str],
+        "author": NotRequired[str],
+        "url": NotRequired[str],
+        "version": NotRequired[str],
+        "vcs-system": NotRequired[str],
+        "vcs-version": NotRequired[str],
+        "vcs-url": NotRequired[str],
+        "vcs-date": NotRequired[str],
+        "licensename": NotRequired[str],
+        "license": NotRequired[str],
+        "credits": NotRequired[str],
+    },
+)
+
+
+@dataclass(slots=True, frozen=True)
+class Extension:
+    type: str
+    name: str
+    namemsg: str
+    description: str
+    descriptionmsg: str
+    author: str
+    url: str
+    version: str
+    vcs_system: str
+    vcs_version: str
+    vcs_url: str
+    vcs_date: str
+    licensename: str
+    license: str
+    credits: str
+
+
+class ExtensionsPayload(TypedDict):
+    extensions: list[ExtensionPayload]
+
+
+class ExtensionsResponse(TypedDict):
+    query: ExtensionsPayload
+
+
 # Libraries and extensions
 # TODO (anden): stuff for libraries and extensions
 
@@ -328,6 +382,42 @@ class MediawikiAPIService:
                 size=uc["size"],
             )
             for uc in data["query"]["usercontribs"]
+        ]
+
+    def get_extensions(self) -> list[Extension]:
+        response = self._client.get(
+            self._api_url,
+            params={
+                "action": "query",
+                "meta": "siteinfo",
+                "siprop": "extensions",
+                "format": "json",
+            },
+        )
+
+        _ = response.raise_for_status()
+
+        data = cast("ExtensionsResponse", response.json())
+
+        return [
+            Extension(
+                type=ex.get("type"),
+                name=ex.get("name", ""),
+                namemsg=ex.get("namemsg", ""),
+                description=ex.get("description", ""),
+                descriptionmsg=ex.get("descriptionmsg", ""),
+                author=ex.get("author", ""),
+                url=ex.get("url", ""),
+                version=ex.get("version", ""),
+                vcs_system=ex.get("vcs_system", ""),
+                vcs_version=ex.get("vcs_version", ""),
+                vcs_url=ex.get("vcs_url", ""),
+                vcs_date=ex.get("vcs_date", ""),
+                licensename=ex.get("licensename", ""),
+                license=ex.get("license", ""),
+                credits=ex.get("credits", ""),
+            )
+            for ex in data["query"]["extensions"]
         ]
 
     def get_recent_changes(

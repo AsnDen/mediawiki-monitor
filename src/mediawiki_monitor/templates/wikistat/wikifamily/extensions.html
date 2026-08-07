@@ -1,0 +1,17 @@
+<div class="wiki-extensions">
+  <h2>Установленные расширения</h2>
+  <ul class="hlist">
+    {% for extension in extensions %}
+    <li>
+      {% if extension.url %}
+        <a
+          href="{{ extension.url }}"
+        >{{ extension.name or extension.namemsg }}
+      </a>
+      {% else %}
+       {{ extension.name or extension.namemsg }} 
+      {% endif %}      
+    </li>
+    {% endfor %}
+  </ul>
+</div>
